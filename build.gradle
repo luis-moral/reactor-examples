@@ -1,0 +1,36 @@
+plugins {
+	id "com.github.hierynomus.license" version "0.12.1"
+    id "io.spring.dependency-management" version "1.0.1.RELEASE" 
+}
+
+repositories {
+ 	mavenCentral()
+    jcenter()
+}
+
+dependencyManagement {
+     imports {
+          mavenBom "io.projectreactor:reactor-bom:Aluminium-SR2"
+     }
+}
+
+apply from : 'gradle/java/java.gradle'
+//apply from : 'gradle/java/maven.gradle'
+apply from : 'gradle/license/license.gradle'
+apply from : 'gradle/eclipse/java.gradle'
+
+group = 'es.molabs'
+version = '1.0.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Reactor Examples',
+                   'Implementation-Version': version
+    }
+}
+
+dependencies {    
+    compile 'io.projectreactor:reactor-core'
+	
+    testCompile 'junit:junit:4.12'
+}
