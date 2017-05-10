@@ -30,7 +30,7 @@ jar {
 }
 
 dependencies {    
-    compile 'io.projectreactor:reactor-core'
+    compile 'io.projectreactor:reactor-core:3.0.7.RELEASE'
 	
     testCompile 'junit:junit:4.12'
 }
