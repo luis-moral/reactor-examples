@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package reactor.examples.zip;
+package es.molabs.reactor.examples.zip;
 
 import java.util.LinkedList;
 import java.util.List;

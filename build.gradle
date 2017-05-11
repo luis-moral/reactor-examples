@@ -33,4 +33,6 @@ dependencies {
     compile 'io.projectreactor:reactor-core:3.0.7.RELEASE'
 	
     testCompile 'junit:junit:4.12'
+ 	testCompile 'org.mockito:mockito-core:2.7.22'
+    
 }
