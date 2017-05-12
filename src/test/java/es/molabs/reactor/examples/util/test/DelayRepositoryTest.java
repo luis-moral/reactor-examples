@@ -45,11 +45,11 @@ public class DelayRepositoryTest
 		Integer key = 1;
 		
 		StepVerifier.create(delayRepository.get(key))
-		.expectNextCount(1)
-		.expectComplete()
-		.verifyThenAssertThat()
-		.tookMoreThan(Duration.ofMillis(DELAY))
-		.tookLessThan(Duration.ofMillis(DELAY + DELAY_MARGIN));
+			.expectNextCount(1)
+			.expectComplete()
+			.verifyThenAssertThat()
+			.tookMoreThan(Duration.ofMillis(DELAY))
+			.tookLessThan(Duration.ofMillis(DELAY + DELAY_MARGIN));
 		
 		Mockito.verify(repositoryPublisher, Mockito.times(1)).publish(Mockito.anyInt());
 	}
@@ -60,11 +60,11 @@ public class DelayRepositoryTest
 		Integer[] keys = new Integer[] {1, 2, 3};
 		
 		StepVerifier.create(delayRepository.get(keys))
-		.expectNextCount(keys.length)
-		.expectComplete()
-		.verifyThenAssertThat()
-		.tookMoreThan(Duration.ofMillis(DELAY * keys.length))
-		.tookLessThan(Duration.ofMillis((DELAY * keys.length) + DELAY_MARGIN));
+			.expectNextCount(keys.length)
+			.expectComplete()
+			.verifyThenAssertThat()
+			.tookMoreThan(Duration.ofMillis(DELAY * keys.length))
+			.tookLessThan(Duration.ofMillis((DELAY * keys.length) + DELAY_MARGIN));
 		
 		Mockito.verify(repositoryPublisher, Mockito.times(keys.length)).publish(Mockito.anyInt());
 	}

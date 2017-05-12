@@ -38,9 +38,9 @@ public class RepositoryTest
 		Integer key = 1;
 		
 		StepVerifier.create(repository.get(key))
-		.expectNextCount(1)
-		.expectComplete()
-		.verify();
+			.expectNextCount(1)
+			.expectComplete()
+			.verify();
 		
 		Mockito.verify(repositoryPublisher, Mockito.times(1)).publish(Mockito.anyInt());
 	}
@@ -51,9 +51,9 @@ public class RepositoryTest
 		Integer[] keys = new Integer[] {1, 2, 3};
 		
 		StepVerifier.create(repository.get(keys))
-		.expectNextCount(keys.length)
-		.expectComplete()
-		.verify();
+			.expectNextCount(keys.length)
+			.expectComplete()
+			.verify();
 		
 		Mockito.verify(repositoryPublisher, Mockito.times(keys.length)).publish(Mockito.anyInt());
 	}
