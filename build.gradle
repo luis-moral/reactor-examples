@@ -3,11 +3,6 @@ plugins {
     id "io.spring.dependency-management" version "1.0.1.RELEASE" 
 }
 
-repositories {
- 	mavenCentral()
-    jcenter()
-}
-
 dependencyManagement {
      imports {
           mavenBom "io.projectreactor:reactor-bom:Aluminium-SR2"
@@ -29,10 +24,10 @@ jar {
     }
 }
 
-dependencies {    
+dependencies {  
     compile 'io.projectreactor:reactor-core:3.0.7.RELEASE'
 	
     testCompile 'junit:junit:4.12'
  	testCompile 'org.mockito:mockito-core:2.7.22'
-    
+ 	testCompile 'io.projectreactor.addons:reactor-test:3.0.6.RELEASE'    
 }

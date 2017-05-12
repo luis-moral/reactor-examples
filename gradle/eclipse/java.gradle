@@ -1,6 +1,5 @@
 apply plugin: 'eclipse'
 
-
 eclipse
 {
 	jdt

@@ -15,15 +15,67 @@
  */
 package es.molabs.reactor.examples.util.test;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mockito;
+
+import es.molabs.reactor.examples.util.DelayRepository;
+import es.molabs.reactor.examples.util.RepositoryPublisher;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 @RunWith(JUnit4.class)
 public class DelayRepositoryTest 
 {
+	private final static long DELAY = 50;
+	private final static long DELAY_MARGIN = 50;
+	private final static TimeUnit DELAY_TIME_UNIT = TimeUnit.MILLISECONDS;
+	
+	private DelayRepository<Integer, String> delayRepository;
+	private RepositoryPublisher<Integer, String> repositoryPublisher;
+	
 	@Test
 	public void testEmitMono()
-	{		
+	{
+		Integer key = 1;
+		
+		StepVerifier.create(delayRepository.get(key))
+		.expectNextCount(1)
+		.expectComplete()
+		.verifyThenAssertThat()
+		.tookMoreThan(Duration.ofMillis(DELAY))
+		.tookLessThan(Duration.ofMillis(DELAY + DELAY_MARGIN));
+		
+		Mockito.verify(repositoryPublisher, Mockito.times(1)).publish(Mockito.anyInt());
+	}
+	
+	@Test
+	public void testEmitFlux()
+	{
+		Integer[] keys = new Integer[] {1, 2, 3};
+		
+		StepVerifier.create(delayRepository.get(keys))
+		.expectNextCount(keys.length)
+		.expectComplete()
+		.verifyThenAssertThat()
+		.tookMoreThan(Duration.ofMillis(DELAY * keys.length))
+		.tookLessThan(Duration.ofMillis((DELAY * keys.length) + DELAY_MARGIN));
+		
+		Mockito.verify(repositoryPublisher, Mockito.times(keys.length)).publish(Mockito.anyInt());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Before
+	public void setUp()
+	{
+		repositoryPublisher = Mockito.mock(RepositoryPublisher.class);
+		Mockito.doReturn(Mono.just("mock_value")).when(repositoryPublisher).publish(Mockito.anyInt());
+		
+		delayRepository = new DelayRepository<Integer, String>(repositoryPublisher, DELAY, DELAY_TIME_UNIT);
 	}
 }
