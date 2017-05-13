@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import es.molabs.reactor.examples.util.Helper;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -40,7 +41,7 @@ public class ArrayZip
 			.publishOn(Schedulers.newParallel("ComplexZip"))		
 			.map(value -> Integer.toString((Integer) value))			
 			.collect(Collectors.joining(","))
-			.map(v -> print(v))
+			.map(v -> Helper.log(v))
 			.block();				
 	}
 	
@@ -48,13 +49,6 @@ public class ArrayZip
 	{
 		return Mono.just(value)
 				.publishOn(Schedulers.parallel())
-				.map(v -> print(v));
-	}
-	
-	private static<T> T print(T value)
-	{
-		System.out.println(Thread.currentThread().getName() + " -> " + value);
-		
-		return value;
+				.map(v -> Helper.log(v));
 	}
 }
