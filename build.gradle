@@ -5,7 +5,7 @@ plugins {
 
 dependencyManagement {
      imports {
-          mavenBom "io.projectreactor:reactor-bom:Aluminium-SR2"
+          mavenBom "io.projectreactor:reactor-bom:Aluminium-SR3"
      }
 }
 
@@ -25,9 +25,9 @@ jar {
 }
 
 dependencies {  
-    compile 'io.projectreactor:reactor-core:3.0.7.RELEASE'
+    compile 'io.projectreactor:reactor-core'
 	
     testCompile 'junit:junit:4.12'
  	testCompile 'org.mockito:mockito-core:2.7.22'
- 	testCompile 'io.projectreactor.addons:reactor-test:3.0.6.RELEASE'    
+ 	testCompile 'io.projectreactor.addons:reactor-test'    
 }
