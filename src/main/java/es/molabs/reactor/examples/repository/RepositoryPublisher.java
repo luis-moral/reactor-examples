@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.molabs.reactor.examples.util;
+package es.molabs.reactor.examples.repository;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RepositoryPublisher<K, V> 
 {
-	V publish(K key);
+	Mono<V> getMono(K key);
+	
+	Flux<V> getFlux(K key);
 }

@@ -18,7 +18,8 @@ public class Helper
 		Random random = new Random();
 		List<Integer> randomList = new ArrayList<>(count);
 
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++) 
+		{
 			randomList.add(random.nextInt(maxValue));
 		}
 

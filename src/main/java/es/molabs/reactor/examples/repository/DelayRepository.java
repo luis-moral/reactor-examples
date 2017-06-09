@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.molabs.reactor.examples.util;
+package es.molabs.reactor.examples.repository;
 
 import java.util.concurrent.TimeUnit;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class DelayRepository<K, V> extends Repository<K, V>
+public class DelayRepository<K, V> extends BaseRepository<K, V>
 {
 	private final long delayInMillis;
 
@@ -30,18 +30,19 @@ public class DelayRepository<K, V> extends Repository<K, V>
 		
 		this.delayInMillis = timeUnit.toMillis(delay);
 	}
-	
-	public Mono<V> get(K key)
+		
+	public Mono<V> getMono(K key)
 	{
-		return super.get(key)
-				.doOnNext(value -> delayValue(delayInMillis));
+		return getRepositoryPublisher()				
+					.getMono(key)
+					.doOnNext(value -> delayValue(delayInMillis));
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Flux<V> get(K...keys)
+	public Flux<V> getFlux(K key)
 	{
-		return super.get(keys)
-				.doOnNext(value -> delayValue(delayInMillis));
+		return getRepositoryPublisher()
+					.getFlux(key)
+					.doOnNext(value -> delayValue(delayInMillis));
 	}
 	
 	private void delayValue(long delayInMillis)

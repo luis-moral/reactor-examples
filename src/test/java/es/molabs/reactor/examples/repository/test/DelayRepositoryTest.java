@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.molabs.reactor.examples.util.test;
+package es.molabs.reactor.examples.repository.test;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
@@ -24,8 +26,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
-import es.molabs.reactor.examples.util.DelayRepository;
-import es.molabs.reactor.examples.util.RepositoryPublisher;
+import es.molabs.reactor.examples.repository.DelayRepository;
+import es.molabs.reactor.examples.repository.RepositoryPublisher;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -42,39 +45,49 @@ public class DelayRepositoryTest
 	@Test
 	public void testEmitMono()
 	{
-		Integer key = 1;
+		Integer key = 5;
 		
-		StepVerifier.create(delayRepository.get(key))
+		Mockito
+			.doReturn(Mono.just("mock_value"))
+			.when(repositoryPublisher)
+			.getMono(key);		
+		
+		StepVerifier.create(delayRepository.getMono(key))
 			.expectNextCount(1)
 			.expectComplete()
 			.verifyThenAssertThat()
 			.tookMoreThan(Duration.ofMillis(DELAY))
 			.tookLessThan(Duration.ofMillis(DELAY + DELAY_MARGIN));
 		
-		Mockito.verify(repositoryPublisher, Mockito.times(1)).publish(Mockito.anyInt());
+		Mockito.verify(repositoryPublisher, Mockito.times(1)).getMono(key);
 	}
 	
 	@Test
 	public void testEmitFlux()
 	{
-		Integer[] keys = new Integer[] {1, 2, 3};
+		Integer key = 5;
+		List<String> valueList = Arrays.asList("mock_value1", "mock_value2", "mock_value3");
 		
-		StepVerifier.create(delayRepository.get(keys))
-			.expectNextCount(keys.length)
+		Mockito
+			.doReturn(Flux.fromIterable(valueList))
+			.when(repositoryPublisher)
+			.getFlux(key);		
+		
+		StepVerifier.create(delayRepository.getFlux(key))
+			.expectNextCount(valueList.size())
 			.expectComplete()
 			.verifyThenAssertThat()
-			.tookMoreThan(Duration.ofMillis(DELAY * keys.length))
-			.tookLessThan(Duration.ofMillis((DELAY * keys.length) + DELAY_MARGIN));
+			.tookMoreThan(Duration.ofMillis(DELAY * valueList.size()))
+			.tookLessThan(Duration.ofMillis((DELAY * valueList.size()) + DELAY_MARGIN));
 		
-		Mockito.verify(repositoryPublisher, Mockito.times(keys.length)).publish(Mockito.anyInt());
+		Mockito.verify(repositoryPublisher, Mockito.times(1)).getFlux(key);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp()
 	{
-		repositoryPublisher = Mockito.mock(RepositoryPublisher.class);
-		Mockito.doReturn(Mono.just("mock_value")).when(repositoryPublisher).publish(Mockito.anyInt());
+		repositoryPublisher = Mockito.mock(RepositoryPublisher.class);		
 		
 		delayRepository = new DelayRepository<Integer, String>(repositoryPublisher, DELAY, DELAY_TIME_UNIT);
 	}
